@@ -15,12 +15,14 @@ extern "C"
 
 jint JNI_OnLoad(JavaVM *vm, void *reserved)
 {
+    LOGD("JNI_OnLoad");
     JniHelper::setJavaVM(vm);
 
     return JNI_VERSION_1_4;
 }
 
     void cocos_android_app_init (void) {
+        LOGD("cocos_android_app_init");
         AppDelegate *pAppDelegate = new AppDelegate();
     }
 }
