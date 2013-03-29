@@ -47,6 +47,35 @@ struct engine {
     struct saved_state state;
 };
 
+#include "CCEGLView.h"
+#include "draw_nodes/CCDrawingPrimitives.h"
+#include "shaders/CCShaderCache.h"
+#include "textures/CCTextureCache.h"
+
+extern "C" void cocos_android_app_init(void);
+
+static void cocos_init(int w, int h) {
+    if (!cocos2d::CCDirector::sharedDirector()->getOpenGLView())
+    {
+        cocos2d::CCEGLView *view = cocos2d::CCEGLView::sharedOpenGLView();
+        view->setFrameSize(w, h);
+
+        cocos_android_app_init();
+
+        cocos2d::CCApplication::sharedApplication()->run();
+    }
+    else
+    {
+        cocos2d::ccDrawInit();
+        cocos2d::ccGLInvalidateStateCache();
+
+        cocos2d::CCShaderCache::sharedShaderCache()->reloadDefaultShaders();
+        cocos2d::CCTextureCache::reloadAllTextures();
+        cocos2d::CCNotificationCenter::sharedNotificationCenter()->postNotification(EVNET_COME_TO_FOREGROUND, NULL);
+        cocos2d::CCDirector::sharedDirector()->setGLDefaultValues(); 
+    }
+}
+
 /**
  * Initialize an EGL context for the current display.
  */
@@ -113,6 +142,8 @@ static int engine_init_display(struct engine* engine) {
     glEnable(GL_CULL_FACE);
     glShadeModel(GL_SMOOTH);
     glDisable(GL_DEPTH_TEST);
+
+    cocos_init(w, h);
 
     return 0;
 }
