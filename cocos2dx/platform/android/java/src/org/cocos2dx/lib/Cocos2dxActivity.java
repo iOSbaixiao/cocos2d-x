@@ -108,5 +108,4 @@ public class Cocos2dxActivity extends NativeActivity implements Cocos2dxHelperLi
 	public void runOnGLThread(final Runnable pRunnable) {
         // this.mGLSurfaceView.queueEvent(pRunnable);
 	}
->>>>>>> ccx : Cocos2dxActivity extends NativeActivity
 }
