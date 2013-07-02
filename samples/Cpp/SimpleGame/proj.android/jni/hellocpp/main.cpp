@@ -23,6 +23,6 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved)
 
     void cocos_android_app_init (void) {
         LOGD("cocos_android_app_init");
-        AppDelegate *pAppDelegate = new AppDelegate();
+        simplegame::AppDelegate *pAppDelegate = new simplegame::AppDelegate();
     }
 }

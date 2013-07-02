@@ -28,6 +28,8 @@
 
 using namespace cocos2d;
 
+namespace simplegame {
+
 bool GameOverScene::init()
 {
 	if( Scene::init() )
@@ -91,4 +93,6 @@ GameOverLayer::~GameOverLayer()
 		_label->release();
 		_label = NULL;
 	}
+}
+
 }

@@ -2,8 +2,9 @@
 #define __HELLOWORLD_SCENE_H__
 
 #include "cocos2d.h"
-
 #include "SimpleAudioEngine.h"
+
+namespace simplegame {
 
 class HelloWorld : public cocos2d::LayerColor
 {
@@ -43,5 +44,7 @@ protected:
 
 
 };
+
+}
 
 #endif  // __HELLOWORLD_SCENE_H__
