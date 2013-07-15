@@ -16,7 +16,7 @@
 #include "support/CCNotificationCenter.h"
 #include "CCFileUtilsAndroid.h"
 #include "jni/JniHelper.h"
-#include "ThreadHelper.h"
+#include "InputEventQueue.h"
 
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "cocos2dx/nativeactivity.cpp", __VA_ARGS__))
 #define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "cocos2dx/nativeactivity.cpp", __VA_ARGS__))
@@ -192,9 +192,8 @@ static void engine_draw_frame(struct engine* engine) {
     pthread_t thisthread = pthread_self();
     LOGI("pthread_self() = %X", thisthread);
 
-
-    function<void ()> f;
-    if(lockQ->Consume(f)) {
+    std::function<void ()> f;
+    if(inputEventQ->get(f)) {
       f();
     }
 

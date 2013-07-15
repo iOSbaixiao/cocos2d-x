@@ -1,5 +1,5 @@
-#ifndef __THREAD_HELPER_H__
-#define __THREAD_HELPER_H__
+#ifndef __INPUT_EVENT_QUEUE_H__
+#define __INPUT_EVENT_QUEUE_H__
 
 #include <android/sensor.h>
 #include <android/log.h>
@@ -8,18 +8,7 @@
 #include <condition_variable>
 #include <deque>
 #include <atomic>
-/* class ConcurrentQueue { */
-/*  public: */
-/*   void put(std::function<void ()> handler_func); */
-/*   std::function<void ()> get(); */
-/*  private: */
-/*   std::mutex _qMutex; */
-/*   std::condition_variable _qContidion; */
-/*   std::deque<std::function<void ()> > _q; */
-/* }; */
-#define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "cocos2dx/nativeactivity.cpp", __VA_ARGS__))
 
-using namespace std;
 template <typename T>
 class LockFreeQueue {
 
@@ -33,7 +22,7 @@ class LockFreeQueue {
 
   Node* first;             // for producer only
   int count;
-  atomic<Node *> divider, last;         // shared
+  std::atomic<Node *> divider, last;         // shared
 
  public:
 
@@ -51,7 +40,7 @@ class LockFreeQueue {
     }
   }
   
-  void Produce( const T& t ) {
+  void put( const T& t ) {
     (last.load())->next = new Node(t);    // add the new item
     last = (last.load())->next;      // publish it
 
@@ -67,7 +56,7 @@ class LockFreeQueue {
     return count;
   }
   
-  bool Consume( T& result ) {
+  bool get( T& result ) {
     if( (divider.load()) != (last.load()) ) {         // if queue is nonempty
       count--;
       result = (divider.load())->next->value;  // C: copy it back
@@ -79,7 +68,7 @@ class LockFreeQueue {
 };
 
 
-extern LockFreeQueue<function<void ()> > *lockQ;
-void runOnGLThread(function<void ()> func);
+extern LockFreeQueue<std::function<void ()> > *inputEventQ;
+void runOnGLThread(std::function<void ()> func);
 
 #endif
