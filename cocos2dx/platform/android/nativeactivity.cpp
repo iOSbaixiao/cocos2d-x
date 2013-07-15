@@ -192,6 +192,12 @@ static void engine_draw_frame(struct engine* engine) {
     pthread_t thisthread = pthread_self();
     LOGI("pthread_self() = %X", thisthread);
 
+
+    function<void ()> f;
+    if(lockQ->Consume(f)) {
+      f();
+    }
+
     if (engine->display == NULL) {
         // No display.
         LOGW("engine_draw_frame : No display.");
